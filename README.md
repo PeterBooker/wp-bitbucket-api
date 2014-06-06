@@ -14,9 +14,19 @@ Not all Endpoints are supported yet, but all GET Endpoints are planned. PUT and 
 
 * get_user_followers( $username ) - Lists the Followers of given Username.
 
-* **get_user_following( $username )** - Lists the Accounts the given Username is following.
+* get_user_following( $username ) - Lists the Accounts the given Username is following.
 
-* 
+* get_team_members( $team ) - List the Members of given Team.
+
+* get_team_followers( $team ) - List the Followers of given Team.
+
+* get_team_following( $team ) - Lists the Accounts the given Team is following.
+
+* get_team_repositories( $team ) - List the Repositories of given Team.
+
+* get_account_repositories( $account, $page = null ) - List the Repositories of given Account.
+
+* get_repository_commits( $account, $repository, $page = null ) - List the Commits of given Account and Repository.
 
 ## Usage Examples
 
