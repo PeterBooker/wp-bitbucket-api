@@ -278,13 +278,16 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
          * List the Repositories of given Account.
          *
          * @param $account
+         * @param $page
          * @return array|mixed
          */
-        public function get_account_repositories( $account ) {
+        public function get_account_repositories( $account, $page = null ) {
 
-            $url = $this->api_url . 'repositories/' . $account;
+            $url = $this->api_url . 'repositories/' . $account . '?pagelen=' . $this->page_length;
 
-            $url = $url . '?pagelen=' . $this->page_length;
+            if ( $page ) {
+                $url = $url . '&page=' . $page;
+            }
 
             $response = $this->make_request( $url );
 
