@@ -8,11 +8,6 @@
  * @version 1.0
  */
 
-/**
- * Basic Usage Example
- *
- */
-
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
