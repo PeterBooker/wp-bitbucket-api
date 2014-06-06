@@ -37,6 +37,14 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
         private $credentials = array();
 
         /**
+         * Page Length for API Pagination
+         * Between 10-100
+         *
+         * @var int
+         */
+        private $page_length = 25;
+
+        /**
          * Custom WP HTTP API Args
          *
          * @var array
@@ -62,6 +70,36 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
         public function set_api_url( $api_url ) {
 
             $this->api_url = $api_url;
+
+        }
+
+        /**
+         * Gets the Page Length
+         *
+         * @return int
+         */
+        public function get_page_length() {
+
+            return $this->page_length;
+
+        }
+
+        /**
+         * Sets the Page Length
+         *
+         * @param string $page_length
+         */
+        public function set_page_length( $page_length ) {
+
+            if ( 10 > $page_length ) {
+                $page_length = 10;
+            }
+
+            if ( 100 < $page_length ) {
+                $page_length = 100;
+            }
+
+            $this->page_length = $page_length;
 
         }
 
@@ -236,9 +274,17 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
 
         }
 
-        public function get_owner_repositories( $owner ) {
+        /**
+         * List the Repositories of given Account.
+         *
+         * @param $account
+         * @return array|mixed
+         */
+        public function get_account_repositories( $account ) {
 
-            $url = $this->api_url . 'repositories/' . $owner;
+            $url = $this->api_url . 'repositories/' . $account;
+
+            $url = $url . '?pagelen=' . $this->page_length;
 
             $response = $this->make_request( $url );
 
@@ -247,57 +293,42 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
         }
 
         /**
-         * Builds the URL
+         * List the Commits of given Account and Repository.
          *
-         * @return string
+         * @param $account
+         * @param $repository
+         * @param $page
+         * @return array|mixed
          */
-        private function build_url() {
+        public function get_repository_commits( $account, $repository, $page = null ) {
 
-            switch ( $this->call_type ) {
+            $url = $this->api_url . 'repositories/' . $account . '/' . $repository . '/commits/' . '?pagelen=' . $this->page_length;
 
-                // Users Endpoints
-                case 'users-profile':
-                    $url_args = 'users/' . $this->resource;
-                    break;
-                case 'users-followers':
-                    $url_args = 'users/' . $this->resource . '/followers';
-                    break;
-                case 'users-following':
-                    $url_args = 'users/' . $this->resource . '/following';
-                    break;
-
-                // Teams Endpoints
-                case 'teams-profile':
-                    $url_args = 'teams/' . $this->resource;
-                    break;
-                case 'teams-members':
-                    $url_args = 'teams/' . $this->resource . '/members';
-                    break;
-                case 'teams-followers':
-                    $url_args = 'teams/' . $this->resource . '/followers';
-                    break;
-                case 'teams-following':
-                    $url_args = 'teams/' . $this->resource . '/following';
-                    break;
-                case 'teams-repositories':
-                    $url_args = 'teams/' . $this->resource . '/repositories';
-                    break;
-
-                // Repositories Endpoints
-                case 'repositories-owner':
-                    $url_args = 'repositories/' . $this->resource_owner;
-                    break;
-                case 'repositories-commits':
-                    $url_args = 'repositories/' . $this->resource_owner . '/' . $this->resource . '/commits';
-                    break;
-
-                // Default - Not Found
-                default:
-                    return false;
-
+            if ( $page ) {
+                $url = $url . '&page=' . $page;
             }
 
-            return $this->api_url . $url_args;
+            $response = $this->make_request( $url );
+
+            return $response;
+
+        }
+
+        /**
+         * Get the Commit of given Revision, Account and Repository.
+         *
+         * @param $account
+         * @param $repository
+         * @param $revision
+         * @return array|mixed
+         */
+        public function get_repository_commit( $account, $repository, $revision ) {
+
+            $url = $this->api_url . 'repositories/' . $account . '/' . $repository . '/commit/' . $revision;
+
+            $response = $this->make_request( $url );
+
+            return $response;
 
         }
 

@@ -1,21 +1,20 @@
 # WP Bitbucket
 
-WP Bitbucket handles communication between WordPress and the Bitbucket API. It can be added to your theme/plugin or the /mu-plugins/ folder.
+WP Bitbucket handles communication between WordPress and the Bitbucket API. It can be included in your theme/plugin or the /mu-plugins/ folder.
+
+It is licensed under (GPL v2)[http://www.gnu.org/licenses/gpl-2.0.html].
 
 You can see more information about NewRelic's v2 API here: [https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs)
 
 ## Supported Endpoints
 
-Not all Endpoints are supported yet, but all GET Endpoints are planned. PUT and DELETE Endpoints will be considered if there is interest. The following are supported:
+Not all Endpoints are supported yet, but all GET Endpoints are planned. PUT and DELETE Endpoints will be considered if there is interest. You can access the following methods:
 
-* servers-list
-* servers-show (Requires Server ID)
+* get_user_profile( $username ) - Gets the Profile of given Username.
 
-* applications-list
-* applications-show (Requires Application ID)
+* get_user_followers( $username ) - Lists the Followers of given Username.
 
-* key_transactions-list
-* key_transactions-show (Requires Key Transaction ID)
+* get_user_following( $username ) - Lists the Accounts the given Username is following.
 
 ## Usage Examples
 
@@ -26,15 +25,18 @@ To get started check the examples below.
 ```php
 <?php
 
-// Replace with real API Key - http://docs.newrelic.com/docs/apis/api-key
-$api_key = 'XXXXXXXXXXXXXXXXXXXXXXX';
+// Prepare the Credentials
+$username = 'XXXXXXXXX';
+$password = 'XXXXXXXXX';
 
-$newrelic = new WP_NewRelic( $api_key );
+// Init Object with Credentials
+$bitbucket = new WP_Bitbucket( $username, $password );
 
-// Find the Call Type from here - https://rpm.newrelic.com/api/explore/
-$newrelic->set_call_type( 'applications-list' );
+// Prepare the Account Name
+$account = 'XXXXXXXXXX';
 
-$response = $newrelic->make_request();
+// Perform the API Request
+$response = $bitbucket->get_account_repositories( $account );
 
 print_r( $response );
 
@@ -46,24 +48,24 @@ print_r( $response );
 ```php
 <?php
 
-// Replace with real API Key - http://docs.newrelic.com/docs/apis/api-key
-$api_key = 'XXXXXXXXXXXXXXXXXXXXXXX';
+// Prepare the Credentials
+$username = 'XXXXXXXXX';
+$password = 'XXXXXXXXX';
 
-$newrelic = new WP_NewRelic( $api_key );
+// Init Object with Credentials
+$bitbucket = new WP_Bitbucket( $username, $password );
 
-// Find the Call Type from here - https://rpm.newrelic.com/api/explore/
-$newrelic->set_call_type( 'applications-show' );
+// Set Items per Page (default 25)
+$bitbucket->set_page_length( 100 );
 
-$app_id = 000000;
+// Prepare the Account Name
+$account = 'XXXXXXXXX';
 
-$newrelic->set_resource_id( $app_id );
+// Prepare the Repository Name
+$repository = 'XXXXXXXXX';
 
-// WP HTTP API Args
-$args = array(
-    'sslverify' => false,
-);
-
-$response = $newrelic->make_request( $args );
+// Perform the API Request
+$response = $bitbucket->get_repository_commits( $account, $repository, $page = 1 );
 
 print_r( $response );
 
