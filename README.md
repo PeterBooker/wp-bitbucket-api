@@ -14,7 +14,9 @@ Not all Endpoints are supported yet, but all GET Endpoints are planned. PUT and 
 
 * get_user_followers( $username ) - Lists the Followers of given Username.
 
-* get_user_following( $username ) - Lists the Accounts the given Username is following.
+* **get_user_following( $username )** - Lists the Accounts the given Username is following.
+
+* 
 
 ## Usage Examples
 
