@@ -2,9 +2,9 @@
 
 WP Bitbucket handles communication between WordPress and the Bitbucket API. It can be included in your theme/plugin or the /mu-plugins/ folder.
 
-It is licensed under (GPL v2)[http://www.gnu.org/licenses/gpl-2.0.html].
+It is licensed under [GPL v2](http://www.gnu.org/licenses/gpl-2.0.html).
 
-You can see more information about NewRelic's v2 API here: [https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs)
+You can see more information about NewRelic's v2 API here: https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs
 
 ## Supported Endpoints
 
