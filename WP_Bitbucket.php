@@ -128,16 +128,12 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
          * @param string $username
          * @param string $password
          */
-        public function __construct( $username = null, $password = null ) {
+        public function __construct( $username, $password ) {
 
-            if ( ! is_null( $username ) && ! is_null( $password ) ) {
-
-                $this->credentials = array(
-                    'username' => $username,
-                    'password' => $password,
-                );
-
-            }
+            $this->credentials = array(
+                'username' => $username,
+                'password' => $password,
+            );
 
         }
 
