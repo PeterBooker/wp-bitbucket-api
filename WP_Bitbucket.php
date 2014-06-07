@@ -289,14 +289,23 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
         /**
          * List the Commits of given Account and Repository.
          *
-         * @param $account
-         * @param $repository
-         * @param $page
+         * @param string $account
+         * @param string $repository
+         * @param int $page
+         * @param string $include
+         * @param string $exclude
          * @return array|mixed
          */
-        public function get_repository_commits( $account, $repository, $page = null ) {
+        public function get_repository_commits( $account, $repository, $page = null, $include = null, $exclude = null ) {
 
-            $url = $this->api_url . 'repositories/' . $account . '/' . $repository . '/commits/' . '?pagelen=' . $this->page_length;
+            $params = array(
+                'pagelen' => $this->page_length,
+                'page' => $page,
+                'include' => $include,
+                'exclude' => $exclude,
+            );
+
+            $url = $this->api_url . 'repositories/' . $account . '/' . $repository . '/commits/?' . http_build_query( $params, '', '&amp;' );
 
             if ( $page ) {
                 $url = $url . '&page=' . $page;
@@ -358,8 +367,17 @@ if ( ! class_exists( 'WP_Bitbucket' ) ) {
 
             } else {
 
-                // Decode JSON if needed
-                return json_decode( $response['body'] );
+                $status = absint( wp_remote_retrieve_response_code( $response ) );
+
+                if ( 200 == $status ) {
+
+                    return json_decode( $response['body'] );
+
+                } else {
+
+                    return $response;
+
+                }
 
             }
 
